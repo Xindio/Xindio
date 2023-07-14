@@ -1,0 +1,24 @@
+import requests
+from cryptography.fernet import Fernet
+
+# Gerar uma chave de criptografia aleatória
+key = Fernet.generate_key()
+cipher_suite = Fernet(key)
+
+# Mensagem a ser criptografada
+message = "Exemplo de mensagem criptografada."
+
+# Criptografar a mensagem usando a chave
+cipher_text = cipher_suite.encrypt(message.encode())
+
+# Enviar a mensagem criptografada via HTTPS
+response = requests.post("https://exemplo.com/endpoint", data=cipher_text)
+
+# Receber a resposta do servidor
+response_text = response.text
+
+# Descriptografar a resposta usando a chave
+decipher_text = cipher_suite.decrypt(response_text.encode())
+
+# Imprimir a mensagem descriptografada
+print(decipher_text.decode())
